@@ -114,7 +114,7 @@ def check_special_char_last_line(num, num_idx, line, above_line):
     return 'Not correct'
 
 def read_file(filename):
-    with open("day3.txt") as f:
+    with open(filename) as f:
         lines = f.readlines()
     return lines
 
