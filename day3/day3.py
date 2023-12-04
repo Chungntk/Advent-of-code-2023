@@ -1,13 +1,14 @@
 def get_num(line):
     nums = []
+    line = line[:-1]
     special_characters = "!@#$%^&*()-+?_=,<>/"
 
     for special_char in special_characters:
         line = line.replace(special_char,'.')
-    
     for char in line.split('.'):
         if char.isnumeric() == True and char not in nums:
-            nums.append(char)
+            nums.append(int(char))
+
     return nums
 
 def check_special_char_first_line(num, num_idx, line, below_line):
@@ -47,21 +48,17 @@ def check_special_char_middle_line(num, num_idx, line, above_line, below_line):
     line_len = len(line)
 
 
-
-    if num_idx > 0 and num_idx < line_len - 1:
+    if num_idx > 0 and num_idx + num_len < line_len - 1:
         if any(c in special_characters for c in line[num_idx - 1 : num_idx + num_len + 1]):
-            # print(num, line[num_idx - 1 : num_idx + num_len + 1])
             return int(num)
             
         if any(c in special_characters for c in below_line[num_idx - 1 : num_idx + num_len + 1]):
-            # print(num, below_line[num_idx - 1 : num_idx + num_len + 1])
             return int(num)
         
         if any(c in special_characters for c in above_line[num_idx - 1 : num_idx + num_len + 1]):
-            # print(num, above_line[num_idx - 1 : num_idx + num_len + 1])
             return int(num)
     
-    if num_idx == 0 and num_idx < line_len - 1:
+    if num_idx == 0:
 
         if any(c in special_characters for c in line[num_idx : num_idx + num_len + 1]):
             return int(num)
@@ -72,15 +69,15 @@ def check_special_char_middle_line(num, num_idx, line, above_line, below_line):
         if any(c in special_characters for c in above_line[num_idx : num_idx + num_len + 1]):
             return int(num)
 
-    if num_idx > 0 and num_idx == line_len - 1:
+    if num_idx + num_len == line_len - 1 :
 
-        if any(c in special_characters for c in line[num_idx -1 : num_idx + num_len]):
+        if any(c in special_characters for c in line[num_idx -1 : ]):
             return int(num)
 
-        if any(c in special_characters for c in below_line[num_idx -1 : num_idx + num_len]):
+        if any(c in special_characters for c in below_line[num_idx -1 : ]):
             return int(num)
         
-        if any(c in special_characters for c in above_line[num_idx -1 : num_idx + num_len]):
+        if any(c in special_characters for c in above_line[num_idx -1 : ]):
             return int(num)
 
 
@@ -98,7 +95,7 @@ def check_special_char_last_line(num, num_idx, line, above_line):
         if any(c in special_characters for c in above_line[num_idx : num_idx + num_len + 1]):
             return int(num)
 
-    if num_idx == line_len -1:
+    if num_idx + num_len == line_len -1:
 
         if any(c in special_characters for c in line[num_idx -1 : num_idx + num_len]):
             return int(num)
@@ -106,15 +103,14 @@ def check_special_char_last_line(num, num_idx, line, above_line):
         if any(c in special_characters for c in above_line[num_idx -1 : num_idx + num_len]):
             return int(num)
     
-    if num_idx > 0 and num_idx < line_len -1:
-        # print('btw', num, 'idx :', num_idx)
+    if num_idx > 0 and num_idx + num_len < line_len -1:
+
         if any(c in special_characters for c in line[num_idx - 1 : num_idx + num_len + 1]):
-            # print(line[num_idx - 1 : num_idx + num_len + 1])
             return int(num)
             
         if any(c in special_characters for c in above_line[num_idx - 1 : num_idx + num_len + 1]):
-            # print(above_line[num_idx - 1 : num_idx + num_len + 1])
             return int(num)
+
     return 'Not correct'
 
 
@@ -122,23 +118,25 @@ def check_special_char_last_line(num, num_idx, line, above_line):
 
 with open("day3.txt") as f:
     lines = f.readlines()
-    corrected_nums = []
+    sum_all = 0
 
     for line_idx in range(len(lines)):
+
+        corrected_nums = []
 
         line = lines[line_idx]
 
         nums = get_num(line)
-        # print(line, '\n', nums)
         
         if line_idx == 0:
-            # print(line_idx, "hey first line")
+
             below_line = lines[line_idx + 1]
             
             
             for num in sorted(nums,reverse=True):
+                num = str(num)
                 num_idxs = [index for index in range(len(line)) if line.startswith(num, index)]
-                # print(num, num_idxs)
+
                 s = '.'*len(num)
                 line = line.replace(num,s)
 
@@ -150,12 +148,13 @@ with open("day3.txt") as f:
 
 
         if line_idx == len(lines) - 1:
-            # print(line_idx, "hey last line")
+
             above_line = lines[line_idx - 1]
 
             for num in sorted(nums, reverse=True):
+                num = str(num)
                 num_idxs = [index for index in range(len(line)) if line.startswith(num, index)]
-                # print(num, num_idxs)
+
                 s = '.'*len(num)
                 line = line.replace(num,s)
 
@@ -166,25 +165,24 @@ with open("day3.txt") as f:
 
 
         if line_idx > 0 and line_idx < len(lines) - 1:
-            # print(line_idx, "hey middle line")
+
             above_line = lines[line_idx - 1]
             below_line = lines[line_idx + 1]
 
             for num in sorted(nums, reverse=True):
+                num = str(num)
                 num_idxs = [index for index in range(len(line)) if line.startswith(num, index)]
                 s = '.'*len(num)
                 line = line.replace(num,s)
-                # print(num, num_idxs)
                 
                 for num_idx in num_idxs:
                     correct_num = check_special_char_middle_line(num, num_idx, line, above_line, below_line)
                     if type(correct_num) == int:
                         corrected_nums.append(correct_num)
 
-        
+        print(line_idx, corrected_nums)
+        sum_all = sum_all + sum(corrected_nums)
+    print(sum_all)
 
-    print(corrected_nums, sum(corrected_nums))
-    # print(lines[139])
-                            
 
 
