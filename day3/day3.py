@@ -113,11 +113,14 @@ def check_special_char_last_line(num, num_idx, line, above_line):
 
     return 'Not correct'
 
+def read_file(filename):
+    with open("day3.txt") as f:
+        lines = f.readlines()
+    return lines
 
+def part_1():
 
-
-with open("day3.txt") as f:
-    lines = f.readlines()
+    lines = read_file("day3.txt")
     sum_all = 0
 
     for line_idx in range(len(lines)):
@@ -180,9 +183,28 @@ with open("day3.txt") as f:
                     if type(correct_num) == int:
                         corrected_nums.append(correct_num)
 
-        print(line_idx, corrected_nums)
+        # print(line_idx, corrected_nums)
         sum_all = sum_all + sum(corrected_nums)
-    print(sum_all)
+    print("Part 1: ", sum_all)
+
+def part_2():
+    
+    lines = read_file("day3.txt")
 
 
 
+
+
+    print("Part 2: ")
+    return "Part 2: "
+
+
+def main():
+
+    part_1()
+
+    part_2()
+
+
+if __name__ == "__main__":
+    main()
